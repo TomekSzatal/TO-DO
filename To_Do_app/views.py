@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from To_Do_app.forms import TaskForm
-from To_Do_app.models import Task
+from To_Do_app.models import Task, Tag
 
 
 class TaskListView(generic.ListView):
@@ -36,21 +36,21 @@ def toggle_status(request, pk):
 
 
 class TagListView(generic.ListView):
-    model = Task
+    model = Tag
 
 
 class TagCreateView(generic.CreateView):
-    model = Task
+    model = Tag
     fields = "__all__"
     success_url = reverse_lazy("To_Do_app:tag-list")
 
 
 class TagUpdateView(generic.UpdateView):
-    model = Task
+    model = Tag
     fields = "__all__"
     success_url = reverse_lazy("To_Do_app:tag-list")
 
 
 class TagDeleteView(generic.DeleteView):
-    model = Task
+    model = Tag
     success_url = reverse_lazy("To_Do_app:tag-list")
