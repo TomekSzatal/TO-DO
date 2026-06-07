@@ -1,3 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views import generic
 
-# Create your views here.
+from To_Do_app.models import Task
+
+
+class TaskListView(generic.ListView):
+    model = Task
+
+
+class TaskCreateView(generic.CreateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("To_Do_app:task-list")
+
+
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("To_Do_app:task-list")
+
+
+class TaskDeleteView(generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("To_Do_app:task-list")
+
+
+def toggle_status(request, pk):
+    if request.method == "POST":
+        task = get_object_or_404(Task, pk=pk)
+        task.completed = not task.completed
+        task.save()
+    return redirect("todo:task-list")
+
+
+class TagListView(generic.ListView):
+    model = Task
+
+
+class TagCreateView(generic.CreateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("To_Do_app:tag-list")
+
+
+class TagUpdateView(generic.UpdateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy("To_Do_app:tag-list")
+
+
+class TagDeleteView(generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("To_Do_app:tag-list")
