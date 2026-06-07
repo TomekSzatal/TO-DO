@@ -1,2 +1,5 @@
 .idea
 .venv
+**__pycache__
+/To_Do_app/migrations/0001_initial.py
+/db.sqlite3

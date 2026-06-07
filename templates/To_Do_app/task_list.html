@@ -1,0 +1,45 @@
+{% extends  "base.html" %}
+{% block content %}
+  <h1 class="fw-semibold mb-4">
+    TODO list
+    <a class="btn btn-primary" style="float: right" href="{% url 'To_Do_app:task-create' %}">
+      Add task
+    </a>
+  </h1>
+  {% for task in task_list %}
+  <h3 class="fw-bold mb-3" >
+    {{ task.content }}
+    {% if not task.accepted %}
+      <form style="float: right" action="{% url 'To_Do_app:task-toggle' pk=task.id %}" method="post">
+        {% csrf_token %}
+        <button  class="btn btn-success" type="submit">Complete</button>
+      </form>
+      <span style="color: red">{{ task.accepted|yesno:"Done,Not done" }}</span>
+    {% else %}
+      <form style="float: right" action="{% url 'To_Do_app:task-toggle' pk=task.id %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-secondary" type="submit">Undo</button>
+      </form>
+      <span style="color: #319731">{{ task.accepted|yesno:"Done,Not done" }}</span>
+    {% endif %}
+  </h3>
+  <h5 class="mb-3">
+    <small>
+      Created: {{ task.datetime }}
+      {% if task.deadline %}
+      <span class="text-danger-emphasis">Deadline: {{ task.deadline }}</span>
+      {% endif %}
+    </small>
+  </h5>
+  <h4 class="mb-4">
+    <span class="text-muted">Tags:
+    {% for tag in task.tags.all %}
+      {{ tag.name }}
+      <a class="text-decoration-none" href="{% url 'To_Do_app:task-update' pk=task.id %}">Update</a>
+      <a class="text-decoration-none" href="{% url 'To_Do_app:task-delete' pk=task.id %}">Delete</a>
+    {% endfor %}
+    </span>
+  </h4>
+  <hr>
+  {% endfor %}
+{% endblock %}
