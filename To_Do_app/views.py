@@ -2,6 +2,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
+from To_Do_app.forms import TaskForm
 from To_Do_app.models import Task
 
 
@@ -11,13 +12,13 @@ class TaskListView(generic.ListView):
 
 class TaskCreateView(generic.CreateView):
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     success_url = reverse_lazy("To_Do_app:task-list")
 
 
 class TaskUpdateView(generic.UpdateView):
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     success_url = reverse_lazy("To_Do_app:task-list")
 
 
@@ -29,9 +30,9 @@ class TaskDeleteView(generic.DeleteView):
 def toggle_status(request, pk):
     if request.method == "POST":
         task = get_object_or_404(Task, pk=pk)
-        task.completed = not task.completed
+        task.accepted = not task.accepted
         task.save()
-    return redirect("todo:task-list")
+    return redirect("To_Do_app:task-list")
 
 
 class TagListView(generic.ListView):
